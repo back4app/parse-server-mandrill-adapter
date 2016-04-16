@@ -81,9 +81,33 @@ var MandrillAdapter = mandrillOptions => {
     });
   }
 
+  var sendMail = options => {
+    var message = {
+      from_email: mandrillOptions.replyTo,
+      from_name: mandrillOptions.displayName,
+      to: [{
+        email: options.to
+      }],
+      subject: options.subject,
+      text: options.text
+    }
+
+    return new Promise((resolve, reject) => {
+      mandrill_client.messages.send(
+        {
+          message: message,
+          async: true
+        },
+        resolve,
+        reject
+      )
+  });
+}
+
   return Object.freeze({
     sendVerificationEmail: sendVerificationEmail,
-    sendPasswordResetEmail: sendPasswordResetEmail
+    sendPasswordResetEmail: sendPasswordResetEmail,
+    sendMail: sendMail
   });
 }
 
