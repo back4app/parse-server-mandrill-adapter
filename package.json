@@ -1,6 +1,6 @@
 {
   "name": "parse-server-mandrill-adapter",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Used to send Parse Server password reset and email verification emails through Mandrill",
   "main": "index.js",
   "scripts": {
