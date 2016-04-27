@@ -1,10 +1,17 @@
 var mandrill = require('mandrill-api/mandrill');
 
 var MandrillAdapter = mandrillOptions => {
-  if (!mandrillOptions || !mandrillOptions.apiKey || !mandrillOptions.replyTo) {
-    throw 'MandrillAdapter requires an API Key and a Reply-to Address.';
+  if (
+      !mandrillOptions ||
+      !mandrillOptions.apiKey ||
+      !mandrillOptions.fromEmail
+  ) {
+    throw 'MandrillAdapter requires an API Key and a From Email Address.';
   }
 
+  mandrillOptions.replyTo =
+      mandrillOptions.replyTo ||
+      mandrillOptions.fromEmail;
   mandrillOptions.displayName =
       mandrillOptions.displayName ||
       mandrillOptions.replyTo;
@@ -27,8 +34,11 @@ var MandrillAdapter = mandrillOptions => {
 
   var sendVerificationEmail = options => {
     var message = {
-      from_email: mandrillOptions.replyTo,
+      from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
+      headers: {
+        'Reply-To': mandrillOptions.replyTo
+      },
       to: [{
         email: options.user.get("email")
       }],
@@ -55,8 +65,11 @@ var MandrillAdapter = mandrillOptions => {
 
   var sendPasswordResetEmail = options => {
     var message = {
-      from_email: mandrillOptions.replyTo,
+      from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
+      headers: {
+        'Reply-To': mandrillOptions.replyTo
+      },
       to: [{
         email: options.user.get("email")
       }],
@@ -83,8 +96,11 @@ var MandrillAdapter = mandrillOptions => {
 
   var sendMail = options => {
     var message = {
-      from_email: mandrillOptions.replyTo,
+      from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
+      headers: {
+        'Reply-To': mandrillOptions.replyTo
+      },
       to: [{
         email: options.to
       }],

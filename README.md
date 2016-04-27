@@ -15,10 +15,12 @@ var server = ParseServer({
     options: {
       // API key from Mandrill account
       apiKey: 'API-KEY',
-      // Reply-to email address
-      replyTo: 'no-reply@yourdomain.com',
+      // From email address
+      fromEmail: 'no-reply@yourdomain.com',
       // Display name
       displayName: 'no-reply@yourdomain.com',
+      // Reply-to email address
+      replyTo: 'no-reply@yourdomain.com',
       // Verification email subject
       verificationSubject: 'Please verify your e-mail for *|appname|*',
       // Verification email body
