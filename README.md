@@ -10,6 +10,10 @@ How to use:
 ```
 var server = ParseServer({
   ...
+  // App Name
+  appName: 'YourAppName',
+  // Environment where the user can confirm his e-mail address or reset his password (most likely the same as your 'serverURL')
+  publicServerURL: 'YourPublicServerURL',
   emailAdapter: {
     module: 'parse-server-mandrill-adapter',
     options: {
