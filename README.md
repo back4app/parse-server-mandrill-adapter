@@ -28,16 +28,26 @@ var server = ParseServer({
       // Verification email subject
       verificationSubject: 'Please verify your e-mail for *|appname|*',
       // Verification email body
-      verificationBody: 'Hi,\n\nYou are being asked to confirm the e-mail address *|email|* with *|appname|*\n\nClick here to confirm it:\n*|link|*',
+      verificationBody: 'Hi *|username|*,\n\nYou are being asked to confirm the e-mail address *|email|* with *|appname|*\n\nClick here to confirm it:\n*|link|*',
       // Password reset email subject
       passwordResetSubject: 'Password Reset Request for *|appname|*',
       // Password reset email body
-      passwordResetBody: 'Hi,\n\nYou requested a password reset for *|appname|*.\n\nClick here to reset it:\n*|link|*'
+      passwordResetBody: 'Hi *|username|*,\n\nYou requested a password reset for *|appname|*.\n\nClick here to reset it:\n*|link|*'
     }
   }
   ...
 });
 ```
+
+You can use the following variables in the subjects and bodies and they will be replaced with their appropriate values:
+
+`*|appname|*` - your application's display name
+
+`*|username|*` - the user's display name
+
+`*|email|*` - the user's email address
+
+`*|link|*` - the link the user must click to perform the requested action
 
 Developers groups:
 https://groups.google.com/forum/#!forum/back4app
