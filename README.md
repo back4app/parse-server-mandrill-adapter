@@ -49,6 +49,8 @@ You can use the following variables in the subjects and bodies and they will be 
 
 `*|link|*` - the link the user must click to perform the requested action
 
+Note that these variable tokens are formatted using the `MailChimp` merge language. If your Mandrill account is using the `Handlebars` merge language, you should use the alternative format, e.g. `{{appname}}`, `{{username}}`, etc. The Mandrill merge language style can be configured in your Mandrill settings under 'Sending Defaults'.
+
 Developers groups:
 https://groups.google.com/forum/#!forum/back4app
 
