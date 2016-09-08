@@ -1,6 +1,8 @@
 var mandrill = require('mandrill-api/mandrill');
 
 var MandrillAdapter = mandrillOptions => {
+  console.info('Using MandrillAdapter for emails.');
+
   if (
       !mandrillOptions ||
       !mandrillOptions.apiKey ||
@@ -79,20 +81,40 @@ var MandrillAdapter = mandrillOptions => {
       global_merge_vars: [
         { name: 'appname', content: options.appName},
         { name: 'username', content: options.user.get("username")},
+        { name: 'firstname', content: options.user.get("firstName")},
         { name: 'email', content: options.user.get("email")},
         { name: 'link', content: options.link}
       ]
     }
 
     return new Promise((resolve, reject) => {
+      if (mandrillOptions.passwordResetTemplateName) {
+        mandrill_client.messages.sendTemplate(
+          {
+            template_name: mandrillOptions.passwordResetTemplateName,
+            template_content: [],
+            message: message,
+            async: true
+          },
+          function(value) {
+            console.info("Password reset email sent.");
+            resolve(value);
+          },
+          function(error) {
+            console.error(error);
+            reject(error);
+          }
+        )
+      } else {
         mandrill_client.messages.send(
-        {
-          message: message,
-          async: true
-        },
-        resolve,
-        reject
-      )
+          {
+            message: message,
+            async: true
+          },
+          resolve,
+          reject
+        ) 
+      }
     });
   }
 
