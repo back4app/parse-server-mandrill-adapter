@@ -1,7 +1,7 @@
 {
   "name": "parse-server-mandrill-adapter",
-  "version": "1.1.1",
-  "description": "Used to send Parse Server password reset and email verification emails through Mandrill",
+  "version": "1.2.0",
+  "description": "Used to send Parse Server password reset and email verification emails through Mandrill, supporting templates.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,6 +18,7 @@
     "back4app"
   ],
   "author": "Davi Macedo",
+  "contributors": ["Alvaro Larrosa <alarrosa@octobot.io>"],
   "bugs": {
     "url": "https://github.com/back4app/parse-server-mandrill-adapter/issues"
   },

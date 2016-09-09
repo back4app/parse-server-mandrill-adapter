@@ -1,7 +1,6 @@
 var mandrill = require('mandrill-api/mandrill');
 
 var MandrillAdapter = mandrillOptions => {
-  console.info('Using MandrillAdapter for emails.');
 
   if (
       !mandrillOptions ||
@@ -35,6 +34,17 @@ var MandrillAdapter = mandrillOptions => {
   var mandrill_client = new mandrill.Mandrill(mandrillOptions.apiKey);
 
   var sendVerificationEmail = options => {
+    var global_merge_vars = [
+      { name: 'appname', content: options.appName},
+      { name: 'username', content: options.user.get("username")},
+      { name: 'email', content: options.user.get("email")},
+      { name: 'link', content: options.link}
+    ];
+
+    for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
+      global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+    }
+
     var message = {
       from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
@@ -46,45 +56,7 @@ var MandrillAdapter = mandrillOptions => {
       }],
       subject: mandrillOptions.verificationSubject,
       text: mandrillOptions.verificationBody,
-      global_merge_vars: [
-        { name: 'appname', content: options.appName},
-        { name: 'username', content: options.user.get("username")},
-        { name: 'email', content: options.user.get("email")},
-        { name: 'link', content: options.link}
-      ]
-    }
-
-    return new Promise((resolve, reject) => {
-        mandrill_client.messages.send(
-          {
-            message: message,
-            async: true
-          },
-          resolve,
-          reject
-        )
-    });
-  }
-
-  var sendPasswordResetEmail = options => {
-    var message = {
-      from_email: mandrillOptions.fromEmail,
-      from_name: mandrillOptions.displayName,
-      headers: {
-        'Reply-To': mandrillOptions.replyTo
-      },
-      to: [{
-        email: options.user.get("email")
-      }],
-      subject: mandrillOptions.passwordResetSubject,
-      text: mandrillOptions.passwordResetBody,
-      global_merge_vars: [
-        { name: 'appname', content: options.appName},
-        { name: 'username', content: options.user.get("username")},
-        { name: 'firstname', content: options.user.get("firstName")},
-        { name: 'email', content: options.user.get("email")},
-        { name: 'link', content: options.link}
-      ]
+      global_merge_vars: global_merge_vars
     }
 
     return new Promise((resolve, reject) => {
@@ -96,14 +68,60 @@ var MandrillAdapter = mandrillOptions => {
             message: message,
             async: true
           },
-          function(value) {
-            console.info("Password reset email sent.");
-            resolve(value);
+          resolve,
+          reject
+        )
+      } else {
+        mandrill_client.messages.send(
+          {
+            message: message,
+            async: true
           },
-          function(error) {
-            console.error(error);
-            reject(error);
-          }
+          resolve,
+          reject
+        ) 
+      }
+    });
+  }
+
+  var sendPasswordResetEmail = options => {
+
+    var global_merge_vars = [
+      { name: 'appname', content: options.appName},
+      { name: 'username', content: options.user.get("username")},
+      { name: 'email', content: options.user.get("email")},
+      { name: 'link', content: options.link}
+    ];
+
+    for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
+      global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+    }
+
+    var message = {
+      from_email: mandrillOptions.fromEmail,
+      from_name: mandrillOptions.displayName,
+      headers: {
+        'Reply-To': mandrillOptions.replyTo
+      },
+      to: [{
+        email: options.user.get("email")
+      }],
+      subject: mandrillOptions.passwordResetSubject,
+      text: mandrillOptions.passwordResetBody,
+      global_merge_vars: global_merge_vars
+    }
+
+    return new Promise((resolve, reject) => {
+      if (mandrillOptions.passwordResetTemplateName) {
+        mandrill_client.messages.sendTemplate(
+          {
+            template_name: mandrillOptions.passwordResetTemplateName,
+            template_content: [],
+            message: message,
+            async: true
+          },
+          resolve,
+          reject
         )
       } else {
         mandrill_client.messages.send(
