@@ -41,8 +41,10 @@ var MandrillAdapter = mandrillOptions => {
       { name: 'link', content: options.link}
     ];
 
-    for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
-      global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+    if (typeof mandrillOptions.customUserAttributesMergeTags !== 'undefined') {
+      for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
+        global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+      }
     }
 
     var message = {
@@ -60,10 +62,10 @@ var MandrillAdapter = mandrillOptions => {
     }
 
     return new Promise((resolve, reject) => {
-      if (mandrillOptions.passwordResetTemplateName) {
+      if (mandrillOptions.verificationTemplateName) {
         mandrill_client.messages.sendTemplate(
           {
-            template_name: mandrillOptions.passwordResetTemplateName,
+            template_name: mandrillOptions.verificationTemplateName,
             template_content: [],
             message: message,
             async: true
@@ -93,10 +95,12 @@ var MandrillAdapter = mandrillOptions => {
       { name: 'link', content: options.link}
     ];
 
-    for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
-      global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+    if (typeof mandrillOptions.customUserAttributesMergeTags !== 'undefined') {
+      for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
+        global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+      }
     }
-
+    
     var message = {
       from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
