@@ -30,6 +30,7 @@ var MandrillAdapter = mandrillOptions => {
       mandrillOptions.passwordResetBody ||
       'Hi,\n\nYou requested a password reset for *|appname|*.\n\nClick here ' +
       'to reset it:\n*|link|*';
+  mandrillOptions.customUserAttributesMergeTags = mandrillOptions.customUserAttributesMergeTags || [];
 
   var mandrill_client = new mandrill.Mandrill(mandrillOptions.apiKey);
 
