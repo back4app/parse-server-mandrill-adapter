@@ -109,7 +109,7 @@ var MandrillAdapter = mandrillOptions => {
         'Reply-To': mandrillOptions.replyTo
       },
       to: [{
-        email: options.user.get("email")
+        email: options.user.get("email") || options.user.get("username")
       }],
       subject: mandrillOptions.passwordResetSubject,
       text: mandrillOptions.passwordResetBody,
