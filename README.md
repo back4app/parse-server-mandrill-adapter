@@ -7,7 +7,7 @@ $ npm install parse-server-mandrill-adapter --save
 ```
 
 How to use:
-```
+```javascript
 var server = ParseServer({
   ...
   // App Name
