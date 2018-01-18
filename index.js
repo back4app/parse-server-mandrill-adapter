@@ -48,6 +48,15 @@ var MandrillAdapter = mandrillOptions => {
       }
     }
 
+    var subject = mandrillOptions.verificationSubject;
+    var userLang = options.user.get("language");  
+    if (userLang) {
+      userLang = userLang.toUpperCase();
+      if ("verificationSubject" + userLang in mandrillOptions) {
+        subject = mandrillOptions["verificationSubject" + userLang];
+      }
+    }
+
     var message = {
       from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
@@ -57,16 +66,24 @@ var MandrillAdapter = mandrillOptions => {
       to: [{
         email: options.user.get("email")
       }],
-      subject: mandrillOptions.verificationSubject,
+      subject: subject,
       text: mandrillOptions.verificationBody,
       global_merge_vars: global_merge_vars
     }
 
     return new Promise((resolve, reject) => {
       if (mandrillOptions.verificationTemplateName) {
+        var template = mandrillOptions.verificationTemplateName;
+        var userLang = options.user.get("language");
+        if (userLang) {
+          userLang = userLang.toUpperCase();
+          if ("verificationTemplateName" + userLang in mandrillOptions) {
+            template = mandrillOptions["verificationTemplateName" + userLang];
+          }
+        }
         mandrill_client.messages.sendTemplate(
           {
-            template_name: mandrillOptions.verificationTemplateName,
+            template_name: template,
             template_content: [],
             message: message,
             async: true
@@ -101,6 +118,15 @@ var MandrillAdapter = mandrillOptions => {
         global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
       }
     }
+
+    var subject = mandrillOptions.passwordResetSubject;
+    var userLang = options.user.get("language");  
+    if (userLang) {
+      userLang = userLang.toUpperCase();
+      if ("passwordResetSubject" + userLang in mandrillOptions) {
+        subject = mandrillOptions["passwordResetSubject" + userLang];
+      }
+    }
     
     var message = {
       from_email: mandrillOptions.fromEmail,
@@ -111,16 +137,24 @@ var MandrillAdapter = mandrillOptions => {
       to: [{
         email: options.user.get("email") || options.user.get("username")
       }],
-      subject: mandrillOptions.passwordResetSubject,
+      subject: subject,
       text: mandrillOptions.passwordResetBody,
       global_merge_vars: global_merge_vars
     }
 
     return new Promise((resolve, reject) => {
       if (mandrillOptions.passwordResetTemplateName) {
+        var template = mandrillOptions.passwordResetTemplateName;
+        var userLang = options.user.get("language");
+        if (userLang) {
+          userLang = userLang.toUpperCase();
+          if ("passwordResetTemplateName" + userLang in mandrillOptions) {
+            template = mandrillOptions["passwordResetTemplateName" + userLang];
+          }
+        }
         mandrill_client.messages.sendTemplate(
           {
-            template_name: mandrillOptions.passwordResetTemplateName,
+            template_name: template,
             template_content: [],
             message: message,
             async: true
