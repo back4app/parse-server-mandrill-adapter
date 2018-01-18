@@ -64,9 +64,17 @@ var MandrillAdapter = mandrillOptions => {
 
     return new Promise((resolve, reject) => {
       if (mandrillOptions.verificationTemplateName) {
+        var template = mandrillOptions.verificationTemplateName;
+        var userLang = options.user.get("language");
+        if (userLang) {
+          userLang = userLang.toUpperCase();
+          if ("verificationTemplateName" + userLang in mandrillOptions) {
+            template = mandrillOptions["verificationTemplateName" + userLang];
+          }
+        }
         mandrill_client.messages.sendTemplate(
           {
-            template_name: mandrillOptions.verificationTemplateName,
+            template_name: template,
             template_content: [],
             message: message,
             async: true
