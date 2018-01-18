@@ -48,6 +48,15 @@ var MandrillAdapter = mandrillOptions => {
       }
     }
 
+    var subject = mandrillOptions.verificationSubject;
+    var userLang = options.user.get("language");  
+    if (userLang) {
+      userLang = userLang.toUpperCase();
+      if ("verificationSubject" + userLang in mandrillOptions) {
+        subject = mandrillOptions["verificationSubject" + userLang];
+      }
+    }
+
     var message = {
       from_email: mandrillOptions.fromEmail,
       from_name: mandrillOptions.displayName,
@@ -57,7 +66,7 @@ var MandrillAdapter = mandrillOptions => {
       to: [{
         email: options.user.get("email")
       }],
-      subject: mandrillOptions.verificationSubject,
+      subject: subject,
       text: mandrillOptions.verificationBody,
       global_merge_vars: global_merge_vars
     }
