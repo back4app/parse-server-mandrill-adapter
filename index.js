@@ -118,9 +118,17 @@ var MandrillAdapter = mandrillOptions => {
 
     return new Promise((resolve, reject) => {
       if (mandrillOptions.passwordResetTemplateName) {
+        var template = mandrillOptions.passwordResetTemplateName;
+        var userLang = options.user.get("language");
+        if (userLang) {
+          userLang = userLang.toUpperCase();
+          if ("passwordResetTemplateName" + userLang in mandrillOptions) {
+            template = mandrillOptions["passwordResetTemplateName" + userLang];
+          }
+        }
         mandrill_client.messages.sendTemplate(
           {
-            template_name: mandrillOptions.passwordResetTemplateName,
+            template_name: template,
             template_content: [],
             message: message,
             async: true
