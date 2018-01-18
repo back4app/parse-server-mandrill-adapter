@@ -109,6 +109,15 @@ var MandrillAdapter = mandrillOptions => {
         global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
       }
     }
+
+    var subject = mandrillOptions.passwordResetSubject;
+    var userLang = options.user.get("language");  
+    if (userLang) {
+      userLang = userLang.toUpperCase();
+      if ("passwordResetSubject" + userLang in mandrillOptions) {
+        subject = mandrillOptions["passwordResetSubject" + userLang];
+      }
+    }
     
     var message = {
       from_email: mandrillOptions.fromEmail,
@@ -119,7 +128,7 @@ var MandrillAdapter = mandrillOptions => {
       to: [{
         email: options.user.get("email") || options.user.get("username")
       }],
-      subject: mandrillOptions.passwordResetSubject,
+      subject: subject,
       text: mandrillOptions.passwordResetBody,
       global_merge_vars: global_merge_vars
     }
